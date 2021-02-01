@@ -17,11 +17,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .formLogin().disable()
                 .csrf().disable()
                 .cors().and()
                 .sessionManagement().disable()
-                .formLogin().disable()
-                .authorizeRequests();
+                .authorizeRequests()
+                    .antMatchers("/signup").permitAll()
+                    .antMatchers("/email").permitAll()
+                    .antMatchers("/auth").permitAll();
     }
 
     @Override
