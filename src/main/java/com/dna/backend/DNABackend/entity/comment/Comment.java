@@ -31,7 +31,7 @@ public class Comment {
 
     @ManyToOne
     @JsonManagedReference
-    @JoinColumn(name = "timeline_id")
+    @JoinColumn(name = "timelineTbl")
     private Timeline timeline;
 
 }

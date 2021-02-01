@@ -41,7 +41,7 @@ public class Timeline {
     @JoinColumn(name = "user_email")
     private User user;
 
-    @OneToMany(mappedBy = "timeline_id")
+    @OneToMany(mappedBy = "commentTbl")
     @JsonBackReference
     private List<Comment> commentList;
 
