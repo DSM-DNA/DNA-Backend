@@ -26,11 +26,11 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "user_email")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Timeline> timeline;
 
-    @OneToMany(mappedBy = "user_email")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Comment> commentList;
 
