@@ -38,10 +38,10 @@ public class Timeline {
 
     @ManyToOne
     @JsonManagedReference
-    @JoinColumn(name = "user_email")
+    @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "commentTbl")
+    @OneToMany(mappedBy = "timeline")
     @JsonBackReference
     private List<Comment> commentList;
 

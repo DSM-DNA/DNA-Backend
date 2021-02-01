@@ -26,12 +26,12 @@ public class Comment {
 
     @ManyToOne
     @JsonManagedReference
-    @JoinColumn(name = "user_email")
+    @JoinColumn(name = "timelineId")
     private User user;
 
     @ManyToOne
     @JsonManagedReference
-    @JoinColumn(name = "timelineTbl")
+    @JoinColumn(name = "commentId")
     private Timeline timeline;
 
 }
