@@ -2,6 +2,7 @@ package com.dna.backend.DNABackend.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,7 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .csrf().disable()
                 .cors().and()
                 .sessionManagement().disable()
-                .formLogin().disable()
                 .authorizeRequests()
                     .antMatchers("/signup").permitAll()
                     .antMatchers("/email").permitAll()
