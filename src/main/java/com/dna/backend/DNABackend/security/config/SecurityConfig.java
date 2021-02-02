@@ -22,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .cors().and()
                 .sessionManagement().disable()
                 .authorizeRequests()
-                    .antMatchers("/signup").permitAll()
-                    .antMatchers("/email").permitAll()
-                    .antMatchers("/auth").permitAll();
+                    .antMatchers(HttpMethod.POST,"/signup").permitAll()
+                    .antMatchers(HttpMethod.GET, "/email").permitAll()
+                    .antMatchers(HttpMethod.POST, "/auth").permitAll();
     }
 
     @Override

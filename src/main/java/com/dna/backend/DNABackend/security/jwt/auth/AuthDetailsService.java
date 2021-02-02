@@ -1,4 +1,4 @@
-package com.dna.backend.DNABackend.security.jwt;
+package com.dna.backend.DNABackend.security.jwt.auth;
 
 import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.exception.UserNotFoundException;
@@ -15,7 +15,7 @@ public class AuthDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+    public AuthDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return userRepository.findByEmail(userEmail)
                 .map(AuthDetails::new)
                 .orElseThrow(UserNotFoundException::new);

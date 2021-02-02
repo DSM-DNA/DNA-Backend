@@ -1,4 +1,4 @@
-package com.dna.backend.DNABackend.security.jwt;
+package com.dna.backend.DNABackend.security.jwt.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

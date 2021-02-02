@@ -1,4 +1,4 @@
-package com.dna.backend.DNABackend.security.jwt;
+package com.dna.backend.DNABackend.security.jwt.auth;
 
 import com.dna.backend.DNABackend.entity.user.User;
 import lombok.AllArgsConstructor;
