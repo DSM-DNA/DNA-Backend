@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,11 +59,9 @@ public class TimelineControllerTest {
 
     @AfterEach
     public void cleanUp() {
-        System.out.println("deleting..");
         commentRepository.deleteAll();
         timelineRepository.deleteAll();
         userRepository.deleteAll();
-        System.out.println("finish cleaning!");
     }
 
     @BeforeEach
@@ -89,6 +88,7 @@ public class TimelineControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "email2@dsm.hs.kr", password = "password")
     public void createTimelineTest() throws Exception {
         TimelineRequest request = TimelineRequest.builder()
                 .content("contentTest")
@@ -108,6 +108,7 @@ public class TimelineControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "email2@dsm.hs.kr", password = "password")
     public void createTimelineTest_NoData() throws Exception {
         TimelineRequest request = TimelineRequest.builder()
                 .content("")
@@ -141,12 +142,13 @@ public class TimelineControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "email2@dsm.hs.kr", password = "password")
     public void deleteTimelineTest() throws Exception {
         Long timelineId = createTimeline(Type.COMMON, "if you see this title, delete failed");
         createTimeline(Type.COMMON, "success");
         createTimeline(Type.WORKER, "success");
 
-        mvc.perform(delete("/timeline/"+timelineId))
+        mvc.perform(delete("/timeline/"+timelineId)).andDo(print())
                 .andExpect(status().isOk());
 
         List<Timeline> timelines = timelineRepository.findAll();
