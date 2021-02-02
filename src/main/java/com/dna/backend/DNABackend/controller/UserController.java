@@ -2,6 +2,7 @@ package com.dna.backend.DNABackend.controller;
 
 import com.dna.backend.DNABackend.payload.request.SignInRequest;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
+import com.dna.backend.DNABackend.payload.response.TokenResponse;
 import com.dna.backend.DNABackend.service.auth.AuthService;
 import com.dna.backend.DNABackend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class UserController {
 
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signIn(@RequestBody SignInRequest signInRequest) {
-        authService.signIn(signInRequest);
+    public TokenResponse signIn(@RequestBody SignInRequest signInRequest) {
+        return authService.signIn(signInRequest);
     }
 
 }
