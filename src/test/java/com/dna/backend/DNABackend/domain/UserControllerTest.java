@@ -3,12 +3,15 @@ package com.dna.backend.DNABackend.domain;
 import com.dna.backend.DNABackend.DnaBackendApplication;
 import com.dna.backend.DNABackend.entity.user.User;
 import com.dna.backend.DNABackend.entity.user.UserRepository;
+import com.dna.backend.DNABackend.payload.request.SignUpRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -75,6 +79,33 @@ class UserControllerTest {
         mvc.perform(get("/email")
                 .param("email","byeMr@dsm.hs.kr"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 로그인실패() throws Exception {
+        SignUpRequest request = SignUpRequest.builder()
+                                    .name("홍정현")
+                                    .email("byeMrHong@dsm.hs.kr")
+                                    .password("1234")
+                                    .build();
+
+        mvc.perform(post("/signup")
+                .content(new ObjectMapper().writeValueAsBytes(request))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 로그인성공() throws Exception {
+        SignUpRequest request = SignUpRequest.builder()
+                .name("홍정현")
+                .email("byeMrHong-@dsm.hs.kr")
+                .password("1234")
+                .build();
+        mvc.perform(post("/signup")
+                .content(new ObjectMapper().writeValueAsBytes(request))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isCreated());
     }
 
 }

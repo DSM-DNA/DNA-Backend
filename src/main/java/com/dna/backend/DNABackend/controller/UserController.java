@@ -21,7 +21,7 @@ public class UserController {
         return userService.confirmEmail(email);
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.signUp(signUpRequest);
