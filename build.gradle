@@ -19,8 +19,6 @@ repositories {
 }
 
 dependencies {
-	// jpa
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -34,8 +32,13 @@ dependencies {
 	//jwt
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 
-	// mysql
+	// database
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly 'mysql:mysql-connector-java'
+	testImplementation 'com.h2database:h2'
+
+	// redis
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
 
 	// h2
 	testImplementation 'com.h2database:h2'

@@ -34,4 +34,10 @@ public class User {
     @JsonBackReference
     private List<Comment> commentList;
 
+    public static boolean isValidAddress(String email) {
+        String validAddress = "dsm.hs.kr";
+        String emailAddress = email.substring(email.indexOf("@") + 1);
+        return validAddress.equals(emailAddress);
+    }
+
 }
