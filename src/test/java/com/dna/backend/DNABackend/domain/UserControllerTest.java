@@ -1,9 +1,12 @@
 package com.dna.backend.DNABackend.domain;
 
 import com.dna.backend.DNABackend.DnaBackendApplication;
+import com.dna.backend.DNABackend.entity.refreshToken.RefreshTokenRepository;
 import com.dna.backend.DNABackend.entity.user.User;
 import com.dna.backend.DNABackend.entity.user.UserRepository;
+import com.dna.backend.DNABackend.payload.request.SignInRequest;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
+import com.dna.backend.DNABackend.security.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -39,6 +43,12 @@ class UserControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -82,7 +92,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void 로그인실패() throws Exception {
+    public void 회원가입실패() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
                                     .name("홍정현")
                                     .email("byeMrHong@dsm.hs.kr")
@@ -96,7 +106,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void 로그인성공() throws Exception {
+    public void 회원가입성공() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
                 .name("홍정현")
                 .email("byeMrHong-@dsm.hs.kr")
@@ -104,6 +114,16 @@ class UserControllerTest {
                 .build();
         mvc.perform(post("/signup")
                 .content(new ObjectMapper().writeValueAsBytes(request))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void 로그인성공() throws Exception {
+        SignInRequest signInRequest = new SignInRequest("byeMrHong@dsm.hs.kr","1234");
+
+        mvc.perform(post("/auth")
+                .content(new ObjectMapper().writeValueAsString(signInRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
     }
