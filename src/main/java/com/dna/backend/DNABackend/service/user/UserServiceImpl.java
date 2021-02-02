@@ -5,7 +5,6 @@ import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.exception.InvalidEmailAddressException;
 import com.dna.backend.DNABackend.exception.UserAlreadyExistsException;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
-import lombok.CustomLog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean confirmEmail(String email) {
         if (!User.isValidAddress(email))
-            throw new InvalidEmailAddressException();
+            throw new InvalidEmailAddressException(); //학교 이메일인지 확인
 
         if (userRepository.existsById(email)) {
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsException(); //이메일이 이미 존재
         }else {
-            return true;
+            return true; //이메일이 존재 하지 않음 -> 가입 가능
         }
     }
 
