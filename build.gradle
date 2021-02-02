@@ -31,6 +31,9 @@ dependencies {
 	// starter
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	//jwt
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+
 	// mysql
 	runtimeOnly 'mysql:mysql-connector-java'
 
@@ -42,7 +45,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
