@@ -24,12 +24,12 @@ public class Comment {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     @JoinColumn(name = "timelineId")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     @JoinColumn(name = "commentId")
     private Timeline timeline;
