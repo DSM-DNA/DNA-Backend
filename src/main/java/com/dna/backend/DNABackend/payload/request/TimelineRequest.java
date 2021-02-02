@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,10 +18,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TimelineRequest {
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
+    @NotNull
     private Type type;
 
     public Timeline toEntity(User user) {

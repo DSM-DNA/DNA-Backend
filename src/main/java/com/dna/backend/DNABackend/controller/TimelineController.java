@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/timeline")
@@ -18,7 +20,7 @@ public class TimelineController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTimeline(@RequestBody TimelineRequest timelineRequest) {
+    public void createTimeline(@RequestBody @Valid TimelineRequest timelineRequest) {
         timelineService.createTimeline(timelineRequest);
     }
 

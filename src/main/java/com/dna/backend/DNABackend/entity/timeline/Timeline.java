@@ -38,7 +38,7 @@ public class Timeline {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "userId")
     private User user;

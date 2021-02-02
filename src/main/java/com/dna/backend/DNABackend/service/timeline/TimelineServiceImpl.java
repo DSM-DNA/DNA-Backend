@@ -6,6 +6,7 @@ import com.dna.backend.DNABackend.entity.timeline.Timeline;
 import com.dna.backend.DNABackend.entity.timeline.TimelineRepository;
 import com.dna.backend.DNABackend.entity.timeline.enums.Type;
 import com.dna.backend.DNABackend.entity.user.User;
+import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.exception.TimelineNotFoundException;
 import com.dna.backend.DNABackend.payload.request.TimelineRequest;
 import com.dna.backend.DNABackend.payload.response.TimelineListResponse;
@@ -25,16 +26,13 @@ public class TimelineServiceImpl implements TimelineService{
 
     private final TimelineRepository timelineRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
 
     @Override
     public void createTimeline(TimelineRequest timelineRequest) {
         // 대충 토큰검사 해
-        User testUser = User.builder()
-                .name("이름")
-                .password("비밀번호")
-                .email("이메일")
-                .build();
+        User testUser = userRepository.findById("email2@dsm.hs.kr").get();
 
         timelineRepository.save(timelineRequest.toEntity(testUser));
 
@@ -50,10 +48,11 @@ public class TimelineServiceImpl implements TimelineService{
                 .build();
 
         Page<Timeline> timelines;
+
         if(type == null) {
-            timelines = timelineRepository.findAllByType(type, page);
-        }else {
             timelines = timelineRepository.findAllByType(Type.WORKER, page);
+        }else {
+            timelines = timelineRepository.findAllByType(type, page);
         }
 
         List<TimelineResponse> timelineResponse = new ArrayList<>();
