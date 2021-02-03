@@ -8,20 +8,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentRequest {
 
+    @NotBlank
     private String content;
 
+    @NotNull
     private Long timelineId;
 
     public Comment toEntity(Timeline timeline, User user) {
         return Comment.builder()
                 .content(content)
                 .timeline(timeline)
+                .user(user)
                 .build();
     }
 }

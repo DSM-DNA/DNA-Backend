@@ -6,10 +6,14 @@ import com.dna.backend.DNABackend.entity.timeline.Timeline;
 import com.dna.backend.DNABackend.entity.timeline.TimelineRepository;
 import com.dna.backend.DNABackend.entity.timeline.enums.Type;
 import com.dna.backend.DNABackend.entity.user.User;
+import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.exception.TimelineNotFoundException;
+import com.dna.backend.DNABackend.exception.UserNotFoundException;
 import com.dna.backend.DNABackend.payload.request.TimelineRequest;
+import com.dna.backend.DNABackend.payload.response.LackOfPermissionException;
 import com.dna.backend.DNABackend.payload.response.TimelineListResponse;
 import com.dna.backend.DNABackend.payload.response.TimelineResponse;
+import com.dna.backend.DNABackend.security.jwt.auth.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,35 +29,37 @@ public class TimelineServiceImpl implements TimelineService{
 
     private final TimelineRepository timelineRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final AuthenticationFacade authenticationFacade;
 
 
     @Override
     public void createTimeline(TimelineRequest timelineRequest) {
-        // 대충 토큰검사 해
-        User testUser = User.builder()
-                .name("이름")
-                .password("비밀번호")
-                .email("이메일")
-                .build();
+        if(!authenticationFacade.isLogin()) {
+            throw new UserNotFoundException();
+        }
 
-        timelineRepository.save(timelineRequest.toEntity(testUser));
+        User user = userRepository.findById(authenticationFacade.getUserEmail())
+                .orElseThrow(UserNotFoundException::new);
+
+        timelineRepository.save(timelineRequest.toEntity(user));
 
     }
 
     @Override
     public TimelineListResponse getTimelines(Type type, Pageable page) {
-
-        User tmpUser = User.builder()
-                .email("test@dsm.hs.kr")
-                .password("password")
-                .name("hong!")
-                .build();
+        User user = null;
+        if(authenticationFacade.isLogin()) {
+            user = userRepository.findByEmail(authenticationFacade.getUserEmail())
+                    .orElseThrow(UserNotFoundException::new);
+        }
 
         Page<Timeline> timelines;
+
         if(type == null) {
-            timelines = timelineRepository.findAllByType(type, page);
-        }else {
             timelines = timelineRepository.findAllByType(Type.WORKER, page);
+        }else {
+            timelines = timelineRepository.findAllByType(type, page);
         }
 
         List<TimelineResponse> timelineResponse = new ArrayList<>();
@@ -66,7 +72,7 @@ public class TimelineServiceImpl implements TimelineService{
                             .name(timeline.getUser().getName())
                             .createdAt(timeline.getCreatedAt())
                             .type(timeline.getType())
-                            .isMine(timeline.getUser().equals(tmpUser)) // 토큰 되면 진짜 유저가 올거야
+                            .isMine(timeline.getUser().equals(user))
                             .build()
             );
         }
@@ -81,9 +87,19 @@ public class TimelineServiceImpl implements TimelineService{
 
     @Override
     public void deleteTimeline(Long timelineId) {
-        // 대충 토큰검사 & 본인인지 확인
+        if(!authenticationFacade.isLogin()) {
+            throw new UserNotFoundException();
+        }
+
+        User user = userRepository.findById(authenticationFacade.getUserEmail())
+                .orElseThrow(UserNotFoundException::new);
+
         Timeline timeline = timelineRepository.findById(timelineId)
                 .orElseThrow(TimelineNotFoundException::new);
+
+        if(!user.equals(timeline.getUser())) {
+            throw new LackOfPermissionException();
+        }
 
         for(Comment comment : timeline.getCommentList()) {
             commentRepository.delete(comment);
