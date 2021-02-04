@@ -36,7 +36,7 @@ public class UserController {
         return authService.signIn(signInRequest);
     }
 
-    @PutMapping
+    @PutMapping("/auth")
     public AccessTokenResponse tokenRefresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
         return authService.tokenRefresh(refreshToken);
     }
