@@ -2,6 +2,7 @@ package com.dna.backend.DNABackend.controller;
 
 import com.dna.backend.DNABackend.payload.request.SignInRequest;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
+import com.dna.backend.DNABackend.payload.response.AccessTokenResponse;
 import com.dna.backend.DNABackend.payload.response.TokenResponse;
 import com.dna.backend.DNABackend.service.auth.AuthService;
 import com.dna.backend.DNABackend.service.user.UserService;
@@ -33,6 +34,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse signIn(@RequestBody SignInRequest signInRequest) {
         return authService.signIn(signInRequest);
+    }
+
+    @PutMapping
+    public AccessTokenResponse tokenRefresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return authService.tokenRefresh(refreshToken);
     }
 
 }
