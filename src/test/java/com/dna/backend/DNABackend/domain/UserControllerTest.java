@@ -1,6 +1,7 @@
 package com.dna.backend.DNABackend.domain;
 
 import com.dna.backend.DNABackend.DnaBackendApplication;
+import com.dna.backend.DNABackend.entity.refreshToken.RefreshToken;
 import com.dna.backend.DNABackend.entity.refreshToken.RefreshTokenRepository;
 import com.dna.backend.DNABackend.entity.user.User;
 import com.dna.backend.DNABackend.entity.user.UserRepository;
@@ -15,16 +16,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -50,11 +51,17 @@ class UserControllerTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    String accessToken;
+    String refreshToken;
+
     @BeforeEach
     public void setUp() throws Exception {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
+
+        accessToken = jwtTokenProvider.generateAccessToken("helloMrGo@dsm.hs.kr");
+        refreshToken = jwtTokenProvider.generateRefreshToken("helloMrGo@dsm.hs.kr");
 
         userRepository.save(
                 User.builder()
@@ -68,6 +75,13 @@ class UserControllerTest {
                         .email("helloMrGo@dsm.hs.kr")
                         .name("고길동")
                         .password(passwordEncoder.encode("1234"))
+                        .build()
+        );
+        refreshTokenRepository.save(
+                RefreshToken.builder()
+                        .email("helloMrGo@dsm.hs.kr")
+                        .refreshToken(refreshToken)
+                        .refreshExp(500L)
                         .build()
         );
     }
@@ -126,6 +140,27 @@ class UserControllerTest {
                 .content(new ObjectMapper().writeValueAsString(signInRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void refreshTokenTest() throws Exception {
+        mvc.perform(put("/auth")
+                .header("X-Refresh-Token", refreshToken)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    void refreshTokenTestWithExpect() throws Exception {
+        mvc.perform(put("/auth")
+                .header("X-Refresh-Token", "apple")
+        ).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void refreshTokenTestWithIsNotRefreshTokenExcept() throws Exception {
+        mvc.perform(put("/auth")
+                .header("X-Refresh-Token", accessToken)
+        ).andExpect(status().isUnauthorized());
     }
 
 }
