@@ -2,6 +2,8 @@ package com.dna.backend.DNABackend.controller;
 
 import com.dna.backend.DNABackend.payload.request.SignInRequest;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
+import com.dna.backend.DNABackend.payload.response.AccessTokenResponse;
+import com.dna.backend.DNABackend.payload.response.TokenResponse;
 import com.dna.backend.DNABackend.service.auth.AuthService;
 import com.dna.backend.DNABackend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class UserController {
         return userService.confirmEmail(email);
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.signUp(signUpRequest);
@@ -30,8 +32,13 @@ public class UserController {
 
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signIn(@RequestBody SignInRequest signInRequest) {
-        authService.signIn(signInRequest);
+    public TokenResponse signIn(@RequestBody SignInRequest signInRequest) {
+        return authService.signIn(signInRequest);
+    }
+
+    @PutMapping("/auth")
+    public AccessTokenResponse tokenRefresh(@RequestHeader("X-Refresh-Token") String refreshToken) {
+        return authService.tokenRefresh(refreshToken);
     }
 
 }
