@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Timeline {
 
     private String content;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd`T`hh:mm:SS")
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
