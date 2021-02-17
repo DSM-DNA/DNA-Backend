@@ -19,14 +19,38 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// starter
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+
+	//jwt
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+
+	// database
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly 'mysql:mysql-connector-java'
+	testImplementation 'com.h2database:h2'
+
+	// redis
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+
+	// h2
+	testImplementation 'com.h2database:h2'
+
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// test
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
