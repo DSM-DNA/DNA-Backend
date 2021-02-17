@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentResponse {
 
+    private Long commentId;
+
     private String content;
 
     private Boolean isMine;
