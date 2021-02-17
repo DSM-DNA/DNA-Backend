@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TimelineResponse {
 
+    private Long timelineId;
+
     private String title;
 
     private String content;

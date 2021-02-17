@@ -73,6 +73,7 @@ public class TimelineServiceImpl implements TimelineService{
                             .createdAt(timeline.getCreatedAt())
                             .type(timeline.getType())
                             .isMine(timeline.getUser().equals(user))
+                            .timelineId(timeline.getId())
                             .build()
             );
         }

@@ -82,6 +82,7 @@ public class CommentServiceImpl implements CommentService {
         for(Comment comment : comments) {
             commentResponses.add(
                     CommentResponse.builder()
+                            .commentId(comment.getId())
                             .content(comment.getContent())
                             .isMine(comment.getUser().equals(user)) // 토큰 생기면 추가할걸?
                             .build()
