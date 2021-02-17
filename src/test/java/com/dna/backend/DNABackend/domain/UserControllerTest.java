@@ -24,8 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -143,24 +147,38 @@ class UserControllerTest {
     }
 
     @Test
-    void refreshTokenTest() throws Exception {
+    public void refreshTokenTest() throws Exception {
         mvc.perform(put("/auth")
                 .header("X-Refresh-Token", refreshToken)
         ).andExpect(status().isOk());
     }
 
     @Test
-    void refreshTokenTestWithExpect() throws Exception {
+    public void refreshTokenTestWithExpect() throws Exception {
         mvc.perform(put("/auth")
                 .header("X-Refresh-Token", "apple")
         ).andExpect(status().isUnauthorized());
     }
 
     @Test
-    void refreshTokenTestWithIsNotRefreshTokenExcept() throws Exception {
+    public void refreshTokenTestWithIsNotRefreshTokenExcept() throws Exception {
         mvc.perform(put("/auth")
                 .header("X-Refresh-Token", accessToken)
         ).andExpect(status().isUnauthorized());
     }
+
+    @Test
+    @WithMockUser(value = "helloMrGo@dsm.hs.kr", password = "1234")
+    public void 로그아웃() throws Exception {
+        mvc.perform(get("/logout")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void 로그아웃_실패() throws Exception {
+        mvc.perform(get("/logout")
+        ).andExpect(status().isBadRequest()).andDo(print());
+    }
+
 
 }
