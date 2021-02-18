@@ -2,9 +2,10 @@ language: java
 jdk:
   - openjdk11
 
+before_script:
+  - chmod +x gradlew
+script:
+  - ./gradlew check
+  - ./gradlew codeCoverageReport
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
-env:
-  global:
-    - CODECOV_TOKEN='a8008a96-6663-4149-8c53-e176aae22d44'
