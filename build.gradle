@@ -5,6 +5,10 @@ plugins {
 	id 'jacoco'
 }
 
+jacoco {
+	toolVersion = "0.8.5"
+}
+
 group = 'com.dna.back-end'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
