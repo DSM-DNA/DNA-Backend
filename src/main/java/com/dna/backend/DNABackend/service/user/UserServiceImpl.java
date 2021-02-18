@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserService{
                     throw new UserAlreadyExistsException();
                 });
 
+        if (!User.isValidAddress(signUpRequest.getEmail()))
+            throw new InvalidEmailAddressException();
+
         userRepository.save(
                 User.builder()
                         .name(signUpRequest.getName())
