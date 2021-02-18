@@ -25,9 +25,14 @@ public class TimelineController {
     }
 
     @GetMapping("/{type}")
-    public TimelineListResponse getTimeline(@PathVariable Type type,
+    public TimelineListResponse getTimelineFilter(@PathVariable Type type,
                                             Pageable page) {
         return timelineService.getTimelines(type, page);
+    }
+
+    @GetMapping
+    public TimelineListResponse getTimeline(Pageable page) {
+        return timelineService.getTimelines(null, page);
     }
 
     @DeleteMapping("/{timelineId}")
