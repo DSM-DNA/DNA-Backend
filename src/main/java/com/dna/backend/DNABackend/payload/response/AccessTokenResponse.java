@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AccessTokenResponse {
 
-    @JsonProperty("access_token")
+    @JsonProperty("access-token")
     private final String accessToken;
 
 }
