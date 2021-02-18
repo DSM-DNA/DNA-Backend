@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.4.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'jacoco'
 }
 
 jacoco {
@@ -64,11 +63,3 @@ test {
 	useJUnitPlatform()
 }
 
-jacocoTestReport {
-	reports {
-		xml.enabled true
-		xml.destination file("${buildDir}/reports/jacoco/report.xml")
-		html.enabled true
-		csv.enabled false
-	}
-}
