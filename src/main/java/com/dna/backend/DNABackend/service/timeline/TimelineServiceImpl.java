@@ -10,7 +10,7 @@ import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.exception.TimelineNotFoundException;
 import com.dna.backend.DNABackend.exception.UserNotFoundException;
 import com.dna.backend.DNABackend.payload.request.TimelineRequest;
-import com.dna.backend.DNABackend.payload.response.LackOfPermissionException;
+import com.dna.backend.DNABackend.exception.LackOfPermissionException;
 import com.dna.backend.DNABackend.payload.response.TimelineListResponse;
 import com.dna.backend.DNABackend.payload.response.TimelineResponse;
 import com.dna.backend.DNABackend.security.jwt.auth.AuthenticationFacade;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
