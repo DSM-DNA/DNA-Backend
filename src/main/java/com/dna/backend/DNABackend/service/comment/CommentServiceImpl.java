@@ -12,7 +12,7 @@ import com.dna.backend.DNABackend.exception.UserNotFoundException;
 import com.dna.backend.DNABackend.payload.request.CommentRequest;
 import com.dna.backend.DNABackend.payload.response.CommentListResponse;
 import com.dna.backend.DNABackend.payload.response.CommentResponse;
-import com.dna.backend.DNABackend.payload.response.LackOfPermissionException;
+import com.dna.backend.DNABackend.exception.LackOfPermissionException;
 import com.dna.backend.DNABackend.security.jwt.auth.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -83,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
             commentResponses.add(
                     CommentResponse.builder()
                             .commentId(comment.getId())
+                            .name(comment.getUser().getName())
                             .content(comment.getContent())
                             .isMine(comment.getUser().equals(user)) // 토큰 생기면 추가할걸?
                             .build()

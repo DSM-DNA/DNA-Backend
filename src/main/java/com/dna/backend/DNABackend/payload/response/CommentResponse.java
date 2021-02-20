@@ -13,6 +13,8 @@ public class CommentResponse {
 
     private Long commentId;
 
+    private String name;
+
     private String content;
 
     private Boolean isMine;
