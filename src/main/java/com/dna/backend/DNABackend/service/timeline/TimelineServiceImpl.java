@@ -56,9 +56,9 @@ public class TimelineServiceImpl implements TimelineService{
         Page<Timeline> timelines;
 
         if(type == null) {
-            timelines = timelineRepository.findAllByType(Type.WORKER, page);
+            timelines = timelineRepository.findAllByTypeOrderByCreatedAtDesc(Type.WORKER, page);
         }else {
-            timelines = timelineRepository.findAllByType(type, page);
+            timelines = timelineRepository.findAllByTypeOrderByCreatedAtDesc(type, page);
         }
 
         List<TimelineResponse> timelineResponse = new ArrayList<>();

@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
         Timeline timeline = timelineRepository.findById(timelineId)
                 .orElseThrow(TimelineNotFoundException::new);
 
-        Page<Comment> comments = commentRepository.findAllByTimeline(timeline,page);
+        Page<Comment> comments = commentRepository.findAllByTimelineOrderByIdAsc(timeline,page);
         List<CommentResponse> commentResponses = new ArrayList<>();
 
         for(Comment comment : comments) {
