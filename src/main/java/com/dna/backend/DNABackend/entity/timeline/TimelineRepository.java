@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TimelineRepository extends JpaRepository<Timeline, Long> {
 
-    Page<Timeline> findAllByType(Type type, Pageable pageable);
+    Page<Timeline> findAllByTypeOrderByCreatedAtDesc(Type type, Pageable pageable);
 
 }
