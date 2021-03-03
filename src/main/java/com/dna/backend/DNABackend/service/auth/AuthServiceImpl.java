@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService{
                 .map(refreshTokenRepository::save)
                 .map(refreshToken -> {
                     String accessToken = jwtTokenProvider.generateAccessToken(refreshToken.getEmail());
-                    return new TokenResponse(accessToken, refreshToken.getRefreshToken(), accessExp);
+                    return new TokenResponse(accessToken, refreshToken.getRefreshToken(), refreshToken.getRefreshExp());
                 })
                 .orElseThrow(UserNotFoundException::new);
     }
