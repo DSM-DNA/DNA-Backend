@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService{
                 .map(refreshTokenRepository::save)
                 .map(refreshToken -> {
                     String accessToken = jwtTokenProvider.generateAccessToken(refreshToken.getEmail());
-                    return new TokenResponse(accessToken, refreshToken.getRefreshToken(), accessExp);
+                    return new TokenResponse(accessToken, refreshToken.getRefreshToken(), refreshToken.getRefreshExp());
                 })
                 .orElseThrow(UserNotFoundException::new);
     }
@@ -55,9 +55,11 @@ public class AuthServiceImpl implements AuthService{
         }
 
         return refreshTokenRepository.findByRefreshToken(receivedToken)
+                .map(refreshToken -> refreshToken.update(refreshExp))
+                .map(refreshTokenRepository::save)
                 .map(refreshToken ->
-                        new AccessTokenResponse(jwtTokenProvider.generateAccessToken(refreshToken.getEmail())))
-                .orElseThrow(UserNotFoundException::new);
+                        new AccessTokenResponse(jwtTokenProvider.generateAccessToken(jwtTokenProvider.getEmail(receivedToken))))
+                .orElseThrow(InvalidTokenException::new);
     }
 
 }
