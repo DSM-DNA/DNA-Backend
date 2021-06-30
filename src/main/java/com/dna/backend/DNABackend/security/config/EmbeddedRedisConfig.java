@@ -17,12 +17,14 @@ public class EmbeddedRedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
-    private RedisServer redisServer;
+    private static RedisServer redisServer;
 
     @PostConstruct
     public void redisServer() throws IOException {
-        redisServer = new RedisServer(redisPort);
-        redisServer.start();
+        if(redisServer == null) {
+            redisServer = new RedisServer(port);
+            redisServer.start();
+        }
     }
 
     @PreDestroy
