@@ -19,4 +19,13 @@ public class TokenResponse {
     @JsonProperty("refresh_exp")
     private Long refreshExp;
 
+    @JsonProperty("access-token")
+    private String accessToken2;
+
+    @JsonProperty("refresh-token")
+    private String refreshToken2;
+
+    @JsonProperty("refresh-exp")
+    private Long refreshExp2;
+
 }
