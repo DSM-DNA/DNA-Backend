@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
         Map<String, String> param = new HashMap<>();
         param.put("code", generateVerifyCode());
 
-        contentSender.sendMessage(email, param);
+        System.out.println(contentSender.sendMessage(email, param));
     }
 
     @Override
