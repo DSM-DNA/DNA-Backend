@@ -8,21 +8,17 @@ import com.dna.backend.DNABackend.entity.timeline.enums.Type;
 import com.dna.backend.DNABackend.entity.user.User;
 import com.dna.backend.DNABackend.entity.user.UserRepository;
 import com.dna.backend.DNABackend.payload.request.TimelineRequest;
-import com.dna.backend.DNABackend.payload.response.TimelineListResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.assertj.core.api.Assert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,14 +30,11 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.core.Is.is;
 
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ContextConfiguration(classes = DnaBackendApplication.class)
+@SpringBootTest(classes = DnaBackendApplication.class)
 @ActiveProfiles("test")
 public class TimelineControllerTest {
 
@@ -73,19 +66,19 @@ public class TimelineControllerTest {
                 .build();
 
         userRepository.save(
-            User.builder()
-                    .email("email2@dsm.hs.kr")
-                    .password("password")
-                    .name("name")
-                    .build()
+                User.builder()
+                        .email("email2@dsm.hs.kr")
+                        .password("password")
+                        .name("name")
+                        .build()
         );
 
         userRepository.save(
-            User.builder()
-                    .email("email3@dsm.hs.kr")
-                    .password("password")
-                    .name("name")
-                    .build()
+                User.builder()
+                        .email("email3@dsm.hs.kr")
+                        .password("password")
+                        .name("name")
+                        .build()
         );
     }
 
@@ -99,14 +92,14 @@ public class TimelineControllerTest {
                 .build();
 
         mvc.perform(post("/timeline")
-                .content(new ObjectMapper().writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .content(new ObjectMapper().writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         Timeline timeline = timelineRepository.findAll().get(0);
 
-        Assertions.assertEquals(timeline.getTitle(),"titleTest");
-        Assertions.assertEquals(timeline.getContent(),"contentTest");
+        Assertions.assertEquals(timeline.getTitle(), "titleTest");
+        Assertions.assertEquals(timeline.getContent(), "contentTest");
     }
 
     @Test
@@ -119,8 +112,8 @@ public class TimelineControllerTest {
                 .build();
 
         mvc.perform(post("/timeline")
-                .content(new ObjectMapper().writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .content(new ObjectMapper().writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
     }
 
@@ -130,9 +123,9 @@ public class TimelineControllerTest {
         createTimeline(Type.COMMON, "failure");
         createTimeline(Type.WORKER, "failure");
 
-        MvcResult result = mvc.perform(get("/timeline/"+Type.COMMON)
-                .param("size","10")
-                .param("page","0")).andDo(print())
+        MvcResult result = mvc.perform(get("/timeline/" + Type.COMMON)
+                        .param("size", "10")
+                        .param("page", "0")).andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 //
@@ -150,13 +143,13 @@ public class TimelineControllerTest {
         createTimeline(Type.COMMON, "success");
         createTimeline(Type.WORKER, "success");
 
-        mvc.perform(delete("/timeline/"+timelineId)).andDo(print())
+        mvc.perform(delete("/timeline/" + timelineId)).andDo(print())
                 .andExpect(status().isOk());
 
         List<Timeline> timelines = timelineRepository.findAll();
 
-        Assertions.assertEquals(timelines.size(),2);
-        Assertions.assertEquals(timelines.get(0).getTitle(),"success");
+        Assertions.assertEquals(timelines.size(), 2);
+        Assertions.assertEquals(timelines.get(0).getTitle(), "success");
     }
 
     public Long createTimeline(Type type, String title) {

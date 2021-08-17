@@ -5,6 +5,8 @@ import com.dna.backend.DNABackend.entity.refreshToken.RefreshToken;
 import com.dna.backend.DNABackend.entity.refreshToken.RefreshTokenRepository;
 import com.dna.backend.DNABackend.entity.user.User;
 import com.dna.backend.DNABackend.entity.user.UserRepository;
+import com.dna.backend.DNABackend.entity.verify.VerifyCode;
+import com.dna.backend.DNABackend.entity.verify.VerifyCodeRepository;
 import com.dna.backend.DNABackend.payload.request.SignInRequest;
 import com.dna.backend.DNABackend.payload.request.SignUpRequest;
 import com.dna.backend.DNABackend.security.jwt.JwtTokenProvider;
@@ -24,39 +26,30 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = DnaBackendApplication.class)
 @ActiveProfiles("test")
 class UserControllerTest {
 
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     String accessToken;
     String refreshToken;
+    private MockMvc mvc;
+    @Autowired
+    private WebApplicationContext context;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+    @Autowired
+    private VerifyCodeRepository verifyCodeRepository;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -66,6 +59,10 @@ class UserControllerTest {
 
         accessToken = jwtTokenProvider.generateAccessToken("helloMrGo@dsm.hs.kr");
         refreshToken = jwtTokenProvider.generateRefreshToken("helloMrGo@dsm.hs.kr");
+
+        verifyCodeRepository.save(
+                    new VerifyCode("byeMrHong-@dsm.hs.kr", "123456", true)
+        );
 
         userRepository.save(
                 User.builder()
@@ -98,14 +95,14 @@ class UserControllerTest {
     @Test
     public void 회원가입실패() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
-                                    .name("홍정현")
-                                    .email("byeMrHong@dsm.hs.kr")
-                                    .password("1234")
-                                    .build();
+                .name("홍정현")
+                .email("byeMrHong@dsm.hs.kr")
+                .password("1234")
+                .build();
 
         mvc.perform(post("/signup")
-                .content(new ObjectMapper().writeValueAsBytes(request))
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .content(new ObjectMapper().writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
     }
 
@@ -117,18 +114,18 @@ class UserControllerTest {
                 .password("1234")
                 .build();
         mvc.perform(post("/signup")
-                .content(new ObjectMapper().writeValueAsBytes(request))
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .content(new ObjectMapper().writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
     }
 
     @Test
     public void 로그인성공() throws Exception {
-        SignInRequest signInRequest = new SignInRequest("byeMrHong@dsm.hs.kr","1234");
+        SignInRequest signInRequest = new SignInRequest("byeMrHong@dsm.hs.kr", "1234");
 
         mvc.perform(post("/auth")
-                .content(new ObjectMapper().writeValueAsString(signInRequest))
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .content(new ObjectMapper().writeValueAsString(signInRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
     }
 

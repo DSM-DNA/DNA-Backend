@@ -39,12 +39,10 @@ public class Timeline {
     private Type type;
 
     @ManyToOne
-    @JsonManagedReference
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "timeline")
-    @JsonBackReference
     private List<Comment> commentList;
 
 }
