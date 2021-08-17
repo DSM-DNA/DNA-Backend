@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DNA_DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+auth:
+  jwt:
+    secret: ${DNA_SECRET_KEY:hellodna}
+    exp:
+      access: ${DNA_ACCESS_TOKEN_EXP:3600}
+      refresh: ${DNA_REFRESH_TOKEN_EXP:15000}
+
+aws:
+  ses:
+    access-key: ${AWS_SES_ACCESS_KEY}
+    secret-key: ${AWS_SES_SECRET_KEY}

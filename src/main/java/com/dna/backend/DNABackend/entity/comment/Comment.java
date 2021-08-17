@@ -25,13 +25,11 @@ public class Comment {
     private String content;
 
     @ManyToOne
-    @JsonManagedReference
-    @JoinColumn(name = "userEmail")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JsonManagedReference
-    @JoinColumn(name = "timelineId")
+    @JoinColumn(name = "timeline_id")
     private Timeline timeline;
 
 }

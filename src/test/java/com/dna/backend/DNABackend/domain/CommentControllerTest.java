@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = DnaBackendApplication.class)
-@ContextConfiguration(classes = DnaBackendApplication.class)
 @ActiveProfiles("test")
 public class CommentControllerTest {
 

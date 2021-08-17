@@ -27,11 +27,9 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
     private List<Timeline> timeline;
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
     private List<Comment> commentList;
 
     public static boolean isValidAddress(String email) {
