@@ -96,20 +96,6 @@ class UserControllerTest {
     }
 
     @Test
-    public void 이메일중복확인_false() throws Exception {
-        mvc.perform(get("/email")
-                .param("email","byeMrHong@dsm.hs.kr"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void 이메일중복확인_true() throws Exception {
-        mvc.perform(get("/email")
-                .param("email","byeMr@dsm.hs.kr"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void 회원가입실패() throws Exception {
         SignUpRequest request = SignUpRequest.builder()
                                     .name("홍정현")
