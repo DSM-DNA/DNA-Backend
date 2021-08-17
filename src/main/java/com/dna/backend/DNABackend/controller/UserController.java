@@ -25,11 +25,6 @@ public class UserController {
     private final UserService userService;
     private final AuthService authService;
 
-    @GetMapping("/email")
-    public boolean emailCheck(@RequestParam String email) {
-        return userService.confirmEmail(email);
-    }
-
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody SignUpRequest signUpRequest) {
