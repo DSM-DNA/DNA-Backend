@@ -1,35 +1,34 @@
 package com.dna.backend.DNABackend.sesconfig;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync;
-import com.amazonaws.services.simpleemail.model.Destination;
-import com.amazonaws.services.simpleemail.model.SendTemplatedEmailRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.amazonaws.services.simpleemail.model.*;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
 public class SESSender implements ContentSender {
 
-    private final ObjectMapper objectMapper;
     private final AmazonSimpleEmailServiceAsync amazonSimpleEmailServiceAsync;
 
     @Override
-    public boolean sendMessage(String email, Map<String, String> params) {
-        SendTemplatedEmailRequest request = new SendTemplatedEmailRequest()
-                .withDestination(new Destination().withToAddresses(email))
-                .withSource("<dnadsm2021@gmail.com>")
-                .withTemplateData(paramToJson(params));
+    public boolean sendMessage(String email, String code) {
+        Message message = new Message()
+                .withSubject(createContent("DNA 인증 메일입니다."))
+                .withBody(new Body().withHtml(createContent(code)));
 
-        return amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(request).isDone();
+        SendEmailRequest request = new SendEmailRequest()
+                .withDestination(new Destination().withToAddresses(email))
+                .withSource("dnadsm2021@gmail.com")
+                .withMessage(message);
+
+        return amazonSimpleEmailServiceAsync.sendEmailAsync(request).isDone();
     }
 
-    @SneakyThrows
-    private String paramToJson(Map<String, String> params) {
-        return objectMapper.writeValueAsString(params).replaceAll("\"", "\\\"");
+    private Content createContent(String text) {
+        return new Content()
+                .withCharset("UTF-8")
+                .withData(text);
     }
 
 }

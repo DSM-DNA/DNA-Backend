@@ -13,8 +13,6 @@ import com.dna.backend.DNABackend.sesconfig.ContentSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -41,10 +39,7 @@ public class EmailServiceImpl implements EmailService {
         verifyCodeRepository.findById(email)
                 .ifPresent(verifyCodeRepository::delete);
 
-        Map<String, String> param = new HashMap<>();
-        param.put("code", generateVerifyCode());
-
-        contentSender.sendMessage(email, param);
+        contentSender.sendMessage(email, generateVerifyCode());
     }
 
     @Override
