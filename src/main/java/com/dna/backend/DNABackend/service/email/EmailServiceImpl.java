@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
                 helper.setFrom("dna@gmail.com");
                 helper.setTo(request.getEmail());
                 helper.setSubject("DNA 인증번호");
-                helper.setText("인증번호는 \" + authNum + \" 입니다");
+                helper.setText("인증번호는 " + authNum + " 입니다");
             };
 
             javaMailSender.send(preparator);
