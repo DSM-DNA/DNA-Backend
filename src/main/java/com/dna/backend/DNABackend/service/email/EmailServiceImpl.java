@@ -34,10 +34,10 @@ public class EmailServiceImpl implements EmailService {
         try {
             final MimeMessagePreparator preparator = mimeMessage -> {
                 final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-                helper.setFrom("gramo@gmail.com");
+                helper.setFrom("dna@gmail.com");
                 helper.setTo(request.getEmail());
-                helper.setSubject("인증번호는 " + authNum + " 입니다");
-                helper.setText("Gramo");
+                helper.setSubject("DNA 인증번호");
+                helper.setText("인증번호는 \" + authNum + \" 입니다");
             };
 
             javaMailSender.send(preparator);
